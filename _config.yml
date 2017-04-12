@@ -1,7 +1,7 @@
-title: Store Searcher
-description: Search Stores
+title: anfela
+description: Search Quality Online Stores
 timezone: America/Los_Angeles
-repository: martyboggs/store-searcher
+repository: martyboggs/anfela
 permalink: /:categories/:title
 excerpt_separator: <!--more-->
 # incremental: true
@@ -9,8 +9,6 @@ gems:
 - jekyll-redirect-from
 exclude:
 -  notes.txt
--  study.txt
--  pablo.js
 collections:
   archive_category:
     permalink: /category/:name
