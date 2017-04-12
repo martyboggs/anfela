@@ -52,7 +52,7 @@ function displayStoreData(data) {
 
 	for (var key in data) {
 		var store = data[key];
-		sections.stores.el.innerHTML += '<div class="store"><h3>' + store.title + '</h3><img src="/images/' + slugify(store.title) + '.jpg"></div>';
+		sections.stores.el.innerHTML += '<div class="store"><h3>' + store.title + '</h3><img src="' + store.image-url + '"></div>';
 		sections.sectors.el.innerHTML += '<div class="sector">' + store.sector + '</div>';
 		for (var j = 0; j < store.tags.length; j += 1) {
 			sections.tags.el.innerHTML += '<div class="tag">' + store.tags[j] + '</div>';
