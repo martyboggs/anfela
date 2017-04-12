@@ -1,0 +1,95 @@
+---
+---
+<!doctype html>
+<html {% if page.amp %}amp {% endif %}lang="en" class="wf-loading">
+
+<head>
+	<meta charset='utf-8'>
+	{% if page.amp %}<script async src="https://cdn.ampproject.org/v0.js"></script>{% endif %}
+	<!--[if lt IE 9]>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+	<![endif]-->
+	<meta name="google" content="notranslate">
+	<meta http-equiv="Content-Language" content="en">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta id="viewport" name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<link rel="canonical" href="{{site.url}}{{page.url}}" />
+	<meta itemprop="name" content="{{site.title}}">
+	<meta property="og:title" content="{{site.title}}">
+	<meta property="og:url" content="{{site.url}}">
+	<meta property="og:site_name" content="{{site.title}}">
+	<meta name="description" content="{{page.description}}">
+	<meta itemprop="description" content="{{site.description}}">
+	<link rel="icon" sizes="192x192" href="{{site.url}}/images/icons/launcher-icon-4x.png">
+	{% if page.amp == nil %}
+		<link rel="stylesheet" type="text/css" href="{{site.url}}/stylesheets/pygment_trac.css" media="screen">
+		<link rel="stylesheet" type="text/css" href="{{site.url}}/stylesheets/print.css" media="print">
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="{{site.url}}/stylesheets/monokai.css">
+		<link rel="stylesheet" type="text/css" href="{{site.url}}/stylesheets/stylesheet.css">
+		<link rel="stylesheet" type="text/css" href="{{site.url}}/stylesheets/custom.css">
+		<style>
+		.wf-loading h1,
+		.wf-loading h2,
+		.wf-loading h3,
+		.wf-loading h4,
+		.wf-loading h5,
+		.wf-loading h6,
+		.wf-loading p,
+		.wf-loading a,
+		.wf-loading .boxes,
+		.wf-loading canvas {
+			opacity: 0;
+		}
+		</style>
+	{% else %}
+		{% include amp-style.html %}
+		<style amp-boilerplate>body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style><noscript><style amp-boilerplate>body{-webkit-animation:none;-moz-animation:none;-ms-animation:none;animation:none}</style></noscript>
+		<script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+		<script async custom-element="amp-font" src="https://cdn.ampproject.org/v0/amp-font-0.1.js"></script>
+	{% endif %}
+	<script type="application/ld+json">
+	{"@context": "http://schema.org",
+	"@type": "WebPage",
+	"headline": "{{page.title}}",
+	"url": "{{site.url}}{{page.url}}"}
+	</script>
+	<title>{{page.title}}</title>
+</head>
+
+<body>
+	<header>
+		<div class="bg"></div>
+		<div class="inner flex-container">
+			<a href="{{site.url}}/"><h1>Store Searcher</h1></a>
+			<a href="{{site.url}}/stores/?platform=shopify">Shopify</a>
+			<a href="{{site.url}}/stores/?platform=woocommerce">WooCommerce</a>
+			<a href="{{site.url}}/stores/?sector=clothing">Clothing</a>
+			<a href="{{site.url}}/about">About</a>
+		</div>
+	</header>
+	{% include scripts.html %}
+
+	{{content}}
+
+	<footer>
+		<a class="footer-logo" href="{{site.url}}/"><h1>Store Searcher</h1></a>
+		<div class="">
+			{% for category in site.categories limit: 3 %}
+				<a href="{{site.url}}/category/{{category | first | slugify}}">{{category | first}}</a>{% unless forloop.last %}{% endunless %}
+			{% endfor %}
+		</div>
+		<div class="">
+			{% for tag in site.tags limit: 3 %}
+				<a href="{{site.url}}/tag/{{tag | first}}">{{tag | first | capitalize}}</a>{% unless forloop.last %}{% endunless %}
+			{% endfor %}
+		</div>
+		<div class="">
+			{% for model in site.models limit: 3 %}
+				<a href="{{site.url}}/models/{{model.title | slugify}}">{{model.title}}</a>{% unless forloop.last %}{% endunless %}
+			{% endfor %}
+		</div>
+	</footer>
+</body>
+</html>

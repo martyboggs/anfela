@@ -1,0 +1,25 @@
+title: Store Searcher
+description: Search Stores
+timezone: America/Los_Angeles
+repository: martyboggs/store-searcher
+permalink: /:categories/:title
+excerpt_separator: <!--more-->
+# incremental: true
+gems:
+- jekyll-redirect-from
+exclude:
+-  notes.txt
+-  study.txt
+-  pablo.js
+collections:
+  archive_category:
+    permalink: /category/:name
+    output: true
+  archive_tag:
+    permalink: /tag/:name
+    output: true
+  archive_collection:
+    permalink: /all/:name
+    output: true
+  models:
+    output: true

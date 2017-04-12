@@ -1,0 +1,18 @@
+<!--<p>Add some ingredients to your 3d recipe:</p>
+<div>
+	Animation
+
+	Models
+
+	Shadows
+
+	Browser Compatibility
+</div>-->
+
+<div class="boxes-container">
+	<div class="boxes">
+		{% for post in site.related_posts limit: 3 %}
+			{% include box.html %}
+		{% endfor %}
+	</div>
+</div>

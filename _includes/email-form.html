@@ -1,0 +1,43 @@
+<div class="email-cta">
+	<h2><i class="fa fa-envelope"></i> Get Email Updates</h2>
+	<p>Enter your name and email to be notified when new tutorials and 3D models are available:</p>
+	<form id="email-form">
+		<input type="text" name="name" placeholder="name" required>
+		<input type="email" name="email" placeholder="email" required>
+		<input type="submit" value="Sign Up">
+	</form>
+</div>
+
+<script>
+$('#email-form').submit(function (e) {
+	e.preventDefault();
+	addToList(
+		$('#email-form [name=name]').val(),
+		$('#email-form [name=email]').val()
+	);
+});
+
+var list = database.ref('{{site.title | slugify}}/email-list-posts');
+
+function addToList(name, email) {
+	list.orderByChild('email').equalTo(email).once('value', function (snapshot) {
+		$('#email-form [name=name]').val('');
+		$('#email-form [name=email]').val('');
+		$('#email-form [name=name]').focus();
+		if (snapshot.val() === null) {
+			var newEntry = list.push();
+			newEntry.set({
+				name: name,
+				email: email
+			});
+			$('#email-form input[type=submit]').css({background: '#2879d0'}).val('You are subscribed.');
+		} else {
+			$('#email-form input[type=submit]').css({background: 'red'}).val('Already added.');
+			setTimeout(function () {
+				$('#email-form input[type=submit]').css({background: '#ff7f07'}).val('Sign Up');
+			}, 2000);
+			// TODO: cookie?
+		}
+	});
+}
+</script>

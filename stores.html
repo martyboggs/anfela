@@ -1,0 +1,71 @@
+---
+layout: default
+title: Stores
+description: Search
+example: index
+redirect_from:
+---
+
+
+<div class="home" id="content-wrapper">
+	<section class="s1">
+		<div class="padding flex-business"></div>
+	</section>
+
+	<section class="flex-container bold-links m-top-40">
+		<p>e-commerce promotion</p>
+		<!--<amp-img class="hero" src="" width="1367" height="578" alt="{{site.title}}" layout="responsive"></amp-img>-->
+		<p><a href="/submit">get your site indexed</a></p>
+	</section>
+
+	<section class="s2 padding flex-container" id="stores">
+	</section>
+
+	<section class="s3 padding flex-container" id="sectors">
+	</section>
+
+	<section class="s4 padding flex-container" id="tags">
+	</section>
+
+</div>
+<script>
+var list = database.ref('{{site.title | slugify}}/stores');
+getStoreData();
+
+function getStoreData(criteria) {
+	list.orderByChild('title').once('value', function (snapshot) {
+		displayStoreData(snapshot.val());
+	});
+}
+
+function displayStoreData(data) {
+	var sections = {
+		stores: {el: document.getElementById('stores'), unique: []},
+		sectors: {el: document.getElementById('sectors'), unique: []},
+		tags: {el: document.getElementById('tags'), unique: []}
+	};
+
+	// clear sections
+	for (var section in sections) {
+		sections[section].el.innerHTML = '';
+	}
+
+	for (var key in data) {
+		var store = data[key];
+		sections.stores.el.innerHTML += '<div class="store"><h3>' + store.title + '</h3><img src="/images/' + slugify(store.title) + '.jpg"></div>';
+		sections.sectors.el.innerHTML += '<div class="sector">' + store.sector + '</div>';
+		for (var j = 0; j < store.tags.length; j += 1) {
+			sections.tags.el.innerHTML += '<div class="tag">' + store.tags[j] + '</div>';
+		}
+	}
+}
+
+function slugify(text) {
+	return text.toString().toLowerCase()
+		.replace(/\s+/g, '-')           // Replace spaces with -
+		.replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+		.replace(/\-\-+/g, '-')         // Replace multiple - with single -
+		.replace(/^-+/, '')             // Trim - from start of text
+		.replace(/-+$/, '');            // Trim - from end of text
+}
+</script>

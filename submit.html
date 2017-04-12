@@ -1,0 +1,77 @@
+---
+layout: default
+title: Submit
+description: Submit
+example: index
+redirect_from:
+---
+
+<div class="submit" id="content-wrapper">
+	<section class="s1">
+		<div class="padding">
+			<form id="store" class="flex-business">
+				<label for="title">Title
+					<input id="title" type="text" name="title">
+				</label>
+				<label for="description">Description
+					<input id="description" type="text" name="description">
+				</label>
+				<label for="sector">Sector
+					<input id="sector" type="text" name="sector">
+				</label>
+				<label for="tags">Tags (comma-separated)
+					<input id="tags" type="text" name="tags">
+				</label>
+				<label for="platform">Platform
+					<input id="platform" type="text" name="platform">
+				</label>
+				<label for="store-url">Store URL
+					<input id="store-url" type="text" name="store-url">
+				</label>
+				<label for="image-url">Image URL
+					<input id="image-url" type="text" name="image-url">
+				</label>
+				<input class="button" type="submit" value="Add Store">
+			</form>
+		</div>
+	</section>
+</div>
+<script>
+var list = database.ref('{{site.title | slugify}}/stores');
+function addToList(data) {
+	if (data.length === 0) return;
+	var storeObj = {};
+	for (var i = 0; i < data.length; i += 1) {
+		if (!data[i].value) return alert('all fields required');
+		if (data[i].name === 'tags') {
+			var tag, tags = [];
+			data[i].value = data[i].value.split(',');
+			for (var j = 0; j < data[i].value.length; j += 1) {
+				tag = data[i].value[j].trim()
+				if (tag) tags.push(tag);
+			}
+			data[i].value = tags;
+		}
+		storeObj[data[i].name] = data[i].value;
+	}
+	list.orderByChild('title').equalTo(storeObj.title).once('value', function (snapshot) {
+		$('#store *').val('');
+		if (snapshot.val() === null) {
+			var newEntry = list.push();
+			newEntry.set(storeObj);
+			$('#store input[type=submit]').val('Store Submitted!');
+		} else {
+			$('#store input[type=submit]').css({background: 'red'}).val('Store Already Exists');
+			setTimeout(function () {
+				$('#store input[type=submit]').css({background: 'mediumseagreen'}).val('Add Store');
+			}, 2000);
+			// TODO: cookie?
+		}
+	});
+}
+
+document.getElementById('store').addEventListener('submit', function (e) {
+	e.preventDefault();
+	addToList($(this).serializeArray());
+});
+</script>
