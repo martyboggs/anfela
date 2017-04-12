@@ -1,10 +1,11 @@
 ---
 layout: page
 title: About
-description: This here website is run by Marty Boggs. If you would like to contribute an article, email me here.
+description: Anfela makes small online shops happy. We drive traffic, rate your pictures, promote your sales and feature products. Since Anfela is all shops, your customers will find what they want without having to filter through other types of sites.
 example: about
 ---
-This here website is run by Marty Boggs.
-If you would like to contribute an article, <a href="mailto:whack47@gmail.com&subject={{site.title}}">email me here</a>.
+Anfela makes small online shops happy. We drive traffic, rate your pictures, promote your sales and feature products. Since Anfela is all shops, your customers will find what they want without having to filter through other types of sites.
+
+Contact email: <a href="mailto:whack47@gmail.com&subject={{site.title}}">click</a>
 
 {% include email-form.html %}
