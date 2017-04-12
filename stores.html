@@ -9,33 +9,40 @@ redirect_from:
 
 <div class="home" id="content-wrapper">
 	<section class="s1">
-		<div class="padding flex-business"></div>
+		<div class="flex-business"></div>
 	</section>
 
 	<section class="flex-container bold-links m-top-40">
-		<p>e-commerce promotion</p>
-		<!--<amp-img class="hero" src="" width="1367" height="578" alt="{{site.title}}" layout="responsive"></amp-img>-->
-		<p><a href="/submit">get your site indexed</a></p>
+		<!--<p>e-commerce promotion</p>
+		<p><a href="/submit">get your site indexed</a></p>-->
 	</section>
 
-	<section class="s2 padding flex-container" id="stores">
+	<section class="s2 flex-container" id="stores">
 	</section>
 
-	<section class="s3 padding flex-container" id="sectors">
+	<section class="s3 padding" id="sectors">
 	</section>
 
-	<section class="s4 padding flex-container" id="tags">
+	<section class="s4 flex-container" id="tags">
 	</section>
 
 </div>
 <script>
 var list = database.ref('{{site.title | slugify}}/stores');
-getStoreData();
-
-function getStoreData(criteria) {
-	list.orderByChild('title').once('value', function (snapshot) {
-		displayStoreData(snapshot.val());
-	});
+var params = queryParams();
+getStoreData(params);
+function getStoreData(criterion) {
+	for (var key in criterion) {
+		if (criterion[key]) {
+			list.orderByChild(key).equalTo(criterion[key]).on('value', function (snapshot) {
+				displayStoreData(snapshot.val());
+			});
+		} else {
+			list.on('value', function (snapshot) {
+				displayStoreData(snapshot.val());
+			});
+		}
+	}
 }
 
 function displayStoreData(data) {
@@ -67,4 +74,10 @@ function slugify(text) {
 		.replace(/^-+/, '')             // Trim - from start of text
 		.replace(/-+$/, '');            // Trim - from end of text
 }
+
+function queryParams() {
+	var search = location.search.substring(1);
+	return JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+}
+
 </script>

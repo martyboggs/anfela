@@ -792,7 +792,8 @@ section {
 }
 
 .flex-container {
-	margin: 0 calc(50% - 585px);
+	margin: 0 auto;
+	max-width: 1110px;
 }
 @media (max-width: 1200px) {
 	.flex-container {
@@ -808,6 +809,10 @@ section {
 .s3,
 .s5 {
 	background: url('/images/ecommerce.jpg') 50% / cover;
+}
+
+.s1 {
+	min-height: 90px;
 }
 
 .s3 .box {
