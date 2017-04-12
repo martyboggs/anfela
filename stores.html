@@ -49,9 +49,9 @@ function displayStoreData(data) {
 	for (var section in sections) {
 		sections[section].el.innerHTML = '';
 	}
-
 	for (var key in data) {
 		var store = data[key];
+console.log(store);
 		sections.stores.el.innerHTML += '<div class="store"><h3>' + store.title + '</h3><img src="' + store.image-url + '"></div>';
 		sections.sectors.el.innerHTML += '<div class="sector">' + store.sector + '</div>';
 		for (var j = 0; j < store.tags.length; j += 1) {
