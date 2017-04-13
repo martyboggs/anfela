@@ -9,7 +9,7 @@ redirect_from:
 
 <div class="home" id="content-wrapper">
 	<section class="s1">
-		<div class="flex-business"></div>
+		<div class=""></div>
 	</section>
 
 	<section class="s2 padding container" id="stores">
@@ -76,11 +76,16 @@ function displayStoreData(data) {
 	} else {
 		for (var key in data) {
 			var store = data[key];
-			sections.stores.el.innerHTML += '<div class="store"><h3><a href="' + store['store-url'] + '" rel="nofollow" target="_blank">' + store.title + '</a></h3><img src="' + store['image-url'] + '"></div>';
-			sections.sectors.el.innerHTML += '<div class="sector">' + store.sector + '</div>';
+			var storeHtml = '<div class="store"><div class="title-row flex-row"><h3><a href="' + store['store-url'] + '" rel="nofollow" target="_blank">' + store.title + '</a></h3><div class="sector"><a href="/stores?sector=' + store.sector + '">' + store.sector + '</a></div></div><img src="' + store['image-url'] + '"><div class="tags">';
 			for (var j = 0; j < store.tags.length; j += 1) {
-				sections.tags.el.innerHTML += '<div class="tag"><a href="/stores?tag=' + store.tags[j] + '">' + store.tags[j] + '</a></div>';
+				storeHtml += '<div class="tag"><a href="/stores?tag=' + store.tags[j] + '">' + store.tags[j] + '</a></div>'
 			}
+			storeHtml += '</div>';
+			sections.stores.el.innerHTML += storeHtml;
+			// sections.sectors.el.innerHTML += '<div class="sector"><a href="/stores?sector=' + store.sector + '">' + store.sector + '</a></div>';
+			// for (var j = 0; j < store.tags.length; j += 1) {
+			// 	sections.tags.el.innerHTML += '<div class="tag"><a href="/stores?tag=' + store.tags[j] + '">' + store.tags[j] + '</a></div>';
+			// }
 		}
 	}
 }
