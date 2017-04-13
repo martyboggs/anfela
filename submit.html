@@ -37,28 +37,24 @@ redirect_from:
 	</section>
 </div>
 <script>
-var list = database.ref('{{site.title | slugify}}/stores');
+var dbStores = database.ref('{{site.title | slugify}}/stores');
+var dbTags = database.ref('{{site.title | slugify}}/tags');
 function addToList(data) {
 	if (data.length === 0) return;
 	var storeObj = {};
 	for (var i = 0; i < data.length; i += 1) {
 		if (!data[i].value) return alert('all fields required');
-		if (data[i].name === 'tags') {
-			var tag, tags = [];
-			data[i].value = data[i].value.split(',');
-			for (var j = 0; j < data[i].value.length; j += 1) {
-				tag = data[i].value[j].trim()
-				if (tag) tags.push(tag);
-			}
-			data[i].value = tags;
-		}
+		if (data[i].name === 'tags') data[i].value = getTags(data[i].value);
 		storeObj[data[i].name] = data[i].value;
 	}
-	list.orderByChild('title').equalTo(storeObj.title).once('value', function (snapshot) {
+	dbStores.orderByChild('title').equalTo(storeObj.title).once('value', function (snapshot) {
 		$('#store *').val('');
 		if (snapshot.val() === null) {
-			var newEntry = list.push();
+			var newEntry = dbStores.push();
 			newEntry.set(storeObj);
+			for (var i = 0; i < storeObj.tags.length; i += 1) {
+				dbTags.child(storeObj.tags[i]).child(newEntry.key).set(true);
+			}
 			$('#store input[type=submit]').val('Store Submitted!');
 		} else {
 			$('#store input[type=submit]').css({background: 'red'}).val('Store Already Exists');
@@ -68,6 +64,18 @@ function addToList(data) {
 			// TODO: cookie?
 		}
 	});
+}
+
+function getTags(value) {
+	var tag, tags = [];
+	value = value.split(',');
+	for (var j = 0; j < value.length; j += 1) {
+		tag = value[j].trim();
+		if (tag) {
+			tags.push(tag);
+		}
+	}
+	return tags;
 }
 
 document.getElementById('store').addEventListener('submit', function (e) {

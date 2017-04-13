@@ -12,33 +12,53 @@ redirect_from:
 		<div class="flex-business"></div>
 	</section>
 
-	<section class="flex-container bold-links m-top-40">
+	<section class="s2 padding" id="stores">
 		<!--<p>e-commerce promotion</p>
 		<p><a href="/submit">get your site indexed</a></p>-->
 	</section>
 
-	<section class="s2 flex-container" id="stores">
+	<section class="s3 padding">
+		<div class="" id="sectors"></div>
 	</section>
 
-	<section class="s3 padding" id="sectors">
-	</section>
-
-	<section class="s4 flex-container" id="tags">
+	<section class="s4 padding" id="tags">
 	</section>
 
 </div>
 <script>
-var list = database.ref('{{site.title | slugify}}/stores');
+var sections = {
+	stores: {el: document.getElementById('stores'), unique: []},
+	sectors: {el: document.getElementById('sectors'), unique: []},
+	tags: {el: document.getElementById('tags'), unique: []}
+};
+
+var dbStores = database.ref('{{site.title | slugify}}/stores');
+var dbTags = database.ref('{{site.title | slugify}}/tags');
 var params = queryParams();
 getStoreData(params);
 function getStoreData(criterion) {
 	for (var key in criterion) {
-		if (criterion[key]) {
-			list.orderByChild(key).equalTo(criterion[key]).on('value', function (snapshot) {
+		if (criterion[key] && key === 'tag') {
+			dbTags.child(criterion[key]).on('value', function (snapshot) {
+				var ids = snapshot.val();
+				if (!ids) return;
+				var idsArray = Object.keys(ids);
+				var stores = {};
+				var completed = 0;
+				asyncArray(idsArray, function (id) {
+					dbStores.child(id).once('value', function (snapshot) {
+						if (snapshot.val()) stores[id] = snapshot.val();
+						completed += 1;
+						if (completed === idsArray.length) displayStoreData(stores);
+					});
+				});
+			});
+		} else if (criterion[key]) {
+			dbStores.orderByChild(key).equalTo(criterion[key]).on('value', function (snapshot) {
 				displayStoreData(snapshot.val());
 			});
 		} else {
-			list.on('value', function (snapshot) {
+			dbStores.on('value', function (snapshot) {
 				displayStoreData(snapshot.val());
 			});
 		}
@@ -46,22 +66,21 @@ function getStoreData(criterion) {
 }
 
 function displayStoreData(data) {
-	var sections = {
-		stores: {el: document.getElementById('stores'), unique: []},
-		sectors: {el: document.getElementById('sectors'), unique: []},
-		tags: {el: document.getElementById('tags'), unique: []}
-	};
-
 	// clear sections
 	for (var section in sections) {
 		sections[section].el.innerHTML = '';
 	}
-	for (var key in data) {
-		var store = data[key];
-		sections.stores.el.innerHTML += '<div class="store"><h3><a href="' + store['store-url'] + '" rel="nofollow" target="_blank">' + store.title + '</a></h3><img src="' + store['image-url'] + '"></div>';
-		sections.sectors.el.innerHTML += '<div class="sector">' + store.sector + '</div>';
-		for (var j = 0; j < store.tags.length; j += 1) {
-			sections.tags.el.innerHTML += '<div class="tag">' + store.tags[j] + '</div>';
+
+	if (!data) {
+		sections.stores.el.innerHTML += '<div class="store">no stores found</div>';
+	} else {
+		for (var key in data) {
+			var store = data[key];
+			sections.stores.el.innerHTML += '<div class="store"><h3><a href="' + store['store-url'] + '" rel="nofollow" target="_blank">' + store.title + '</a></h3><img src="' + store['image-url'] + '"></div>';
+			sections.sectors.el.innerHTML += '<div class="sector">' + store.sector + '</div>';
+			for (var j = 0; j < store.tags.length; j += 1) {
+				sections.tags.el.innerHTML += '<div class="tag"><a href="/stores?tag=' + store.tags[j] + '">' + store.tags[j] + '</a></div>';
+			}
 		}
 	}
 }
@@ -78,6 +97,16 @@ function slugify(text) {
 function queryParams() {
 	var search = location.search.substring(1);
 	return JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+}
+
+function asyncArray(items, process) {
+	var todo = items.concat();
+	setTimeout(function () {
+		process(todo.shift());
+		if (todo.length > 0) {
+			setTimeout(arguments.callee, 25);
+		}
+	}, 25);
 }
 
 </script>
