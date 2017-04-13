@@ -1792,7 +1792,6 @@ header .inner {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 40px 0;
 }
 
 @media (max-width: 700px) {
@@ -1817,16 +1816,17 @@ section {
 }
 
 .container {
-	margin: 0 calc(50% - 585px);
+	padding: 0 calc(50% - 550px);
 }
 @media (max-width: 1200px) {
 	.container {
-		margin: 0 15px;
+		padding: 0 30px;
 	}
 }
 
 .padding {
-	padding: 40px calc(50% - 550px);
+	padding-top: 40px;
+	padding-bottom: 40px;
 }
 
 amp-img.hero {
@@ -2295,8 +2295,6 @@ footer {
 	align-items: center;
 	background: #333;
 	font-size: 14px;
-}
-footer > *:first-child {
 	padding-top: 0;
 	padding-bottom: 0;
 }
