@@ -8,29 +8,13 @@ redirect_from:
 
 
 <div class="home" id="content-wrapper">
-	<section class="s1">
-		<div class=""></div>
-	</section>
-
 	<section class="s2 padding container" id="stores">
 		<!--<p>e-commerce promotion</p>
 		<p><a href="/submit">get your site indexed</a></p>-->
 	</section>
-
-	<section class="s3 padding container">
-		<div class="" id="sectors"></div>
-	</section>
-
-	<section class="s4 padding container" id="tags">
-	</section>
-
 </div>
 <script>
-var sections = {
-	stores: {el: document.getElementById('stores'), unique: []},
-	sectors: {el: document.getElementById('sectors'), unique: []},
-	tags: {el: document.getElementById('tags'), unique: []}
-};
+var storeSection = {el: document.getElementById('stores'), unique: []};
 
 var dbStores = database.ref('{{site.title | slugify}}/stores');
 var dbTags = database.ref('{{site.title | slugify}}/tags');
@@ -67,12 +51,10 @@ function getStoreData(criterion) {
 
 function displayStoreData(data) {
 	// clear sections
-	for (var section in sections) {
-		sections[section].el.innerHTML = '';
-	}
+	storeSection.el.innerHTML = '';
 
 	if (!data) {
-		sections.stores.el.innerHTML += '<div class="store">no stores found</div>';
+		storeSection.el.innerHTML += '<div class="store">no stores found</div>';
 	} else {
 		for (var key in data) {
 			var store = data[key];
@@ -81,11 +63,7 @@ function displayStoreData(data) {
 				storeHtml += '<div class="tag"><a href="/stores?tag=' + store.tags[j] + '">' + store.tags[j] + '</a></div>'
 			}
 			storeHtml += '</div>';
-			sections.stores.el.innerHTML += storeHtml;
-			// sections.sectors.el.innerHTML += '<div class="sector"><a href="/stores?sector=' + store.sector + '">' + store.sector + '</a></div>';
-			// for (var j = 0; j < store.tags.length; j += 1) {
-			// 	sections.tags.el.innerHTML += '<div class="tag"><a href="/stores?tag=' + store.tags[j] + '">' + store.tags[j] + '</a></div>';
-			// }
+			storeSection.el.innerHTML += storeHtml;
 		}
 	}
 }
